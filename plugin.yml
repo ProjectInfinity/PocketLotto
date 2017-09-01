@@ -1,0 +1,13 @@
+name: PocketLotto
+main: ProjectInfinity\PocketLotto\PocketLotto
+version: 1.0.0
+api: [3.0.0-ALPHA6, 3.0.0-ALPHA7]
+author: ProjectInfinity
+softdepend: ["PocketVote"]
+permissions:
+  pocketlotto.admin:
+    description: "Allows player to manage PocketLotto"
+    default: op
+  pocketlotto.user:
+    description: "Allows the player to purchase tickets"
+    default: true

@@ -1,0 +1,10 @@
+version: 1
+draw-timer-seconds: 3600
+currency-name: Dollars
+ticket:
+  price: 5
+  max-tickets: 10
+  allow-purchase: true
+  add-tickets-on-vote: 1
+  start-pool: 50
+  min-players: 2
