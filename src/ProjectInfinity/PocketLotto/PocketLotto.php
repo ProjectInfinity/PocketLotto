@@ -10,6 +10,7 @@ use ProjectInfinity\PocketLotto\listener\VoteListener;
 use ProjectInfinity\PocketLotto\task\LottoTask;
 use ProjectInfinity\PocketLotto\util\ConfigManager;
 use ProjectInfinity\PocketLotto\util\LottoManager;
+use ProjectInfinity\PocketLotto\util\MoneyManager;
 
 class PocketLotto extends PluginBase {
 
@@ -17,6 +18,8 @@ class PocketLotto extends PluginBase {
     private static $plugin;
     /** @var LottoManager $manager */
     private $manager;
+    /** @var MoneyManager $money */
+    private $money;
     /** @var TaskHandler $lottoTask */
     private $lottoTask;
 
@@ -31,6 +34,7 @@ class PocketLotto extends PluginBase {
         $pocketvote = $this->getServer()->getPluginManager()->getPlugin('PocketVote');
         $this->pocketvoteIsEnabled = isset($pocketvote) ? $pocketvote->isEnabled() : false;
 
+        $this->money = new MoneyManager($this);
         $this->manager = new LottoManager($this);
 
         if($this->pocketvoteIsEnabled) {
@@ -59,5 +63,9 @@ class PocketLotto extends PluginBase {
 
     public function getLottoManager(): LottoManager {
         return $this->manager;
+    }
+
+    public function getMoneyManager(): MoneyManager {
+        return $this->money;
     }
 }

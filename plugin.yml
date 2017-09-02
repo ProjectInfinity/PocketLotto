@@ -3,7 +3,7 @@ main: ProjectInfinity\PocketLotto\PocketLotto
 version: 1.0.0
 api: [3.0.0-ALPHA6, 3.0.0-ALPHA7]
 author: ProjectInfinity
-softdepend: ["PocketVote"]
+softdepend: ["PocketVote", "Economy2", "EconomyAPI"]
 permissions:
   pocketlotto.admin:
     description: "Allows player to manage PocketLotto"

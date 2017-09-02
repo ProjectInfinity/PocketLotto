@@ -18,7 +18,7 @@ class LottoCommand extends Command {
 
     public function execute(CommandSender $sender, string $commandLabel, array $args) {
         if(!$sender->hasPermission('pocketlotto.user')) {
-            $sender->sendMessage(TextFormat::RED.'You do not have permission to purchase tickets.');
+            $sender->sendMessage(TextFormat::RED.'[PocketLotto] You do not have permission to purchase tickets.');
             return true;
         }
 
@@ -37,15 +37,15 @@ class LottoCommand extends Command {
                 $amount = 1;
                 if(count($args) > 1 && is_numeric($args[1])) $amount = (int) $args[1];
                 if(!$this->lm->canAcquireMore($sender->getName())) {
-                    $sender->sendMessage(TextFormat::RED.'You cannot purchase more tickets. Please wait for a draw.');
+                    $sender->sendMessage(TextFormat::RED.'[PocketLotto] You cannot purchase more tickets. Please wait for a draw.');
                     return true;
                 }
                 $purchased = $this->lm->addTicket($sender->getName(), $amount);
                 if($purchased === 0) {
-                    $sender->sendMessage(TextFormat::RED.'You can not afford more or you already have the maximum amount of tickets allowed.');
+                    $sender->sendMessage(TextFormat::RED.'[PocketLotto] You can not afford more or you already have the maximum amount of tickets allowed.');
                     return true;
                 }
-                $sender->sendMessage(TextFormat::GREEN.'Purchased '.$purchased.' ticket(s).');
+                $sender->sendMessage(TextFormat::GREEN.'[PocketLotto] Purchased '.$purchased.' ticket(s).');
                 break;
 
             case 'TIME':
@@ -54,7 +54,7 @@ class LottoCommand extends Command {
                 break;
 
             default:
-                $sender->sendMessage(TextFormat::RED.'Invalid option. Valid options are: buy');
+                $sender->sendMessage(TextFormat::RED.'[PocketLotto] Invalid option. Valid options are: buy, time/draw');
         }
 
         return true;

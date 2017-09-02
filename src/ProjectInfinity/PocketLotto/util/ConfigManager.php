@@ -58,7 +58,7 @@ class ConfigManager {
     }
 
     public static function getMinimumPlayers(): int {
-
+        return self::$minPlayers;
     }
 
     private function checkV1() {}

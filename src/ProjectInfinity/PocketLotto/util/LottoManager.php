@@ -12,12 +12,13 @@ class LottoManager {
     private $players;
     private $prizePool;
 
-    private $drawTimer, $nextTime;
+    private $drawTimer, $nextTime, $money;
 
     public function __construct(PocketLotto $plugin) {
         $this->plugin = $plugin;
         $this->players = [];
         $this->prizePool = ConfigManager::getStartPool();
+        $this->money = $plugin->getMoneyManager();
 
         $this->drawTimer = ConfigManager::getDrawTimer() > 3600 ? 3600 : ConfigManager::getDrawTimer();
         $this->nextTime = new DateTime();
@@ -38,7 +39,13 @@ class LottoManager {
         $added = 0;
         for($i = 0; $i < $amount; $i++) {
             if(!$this->canAcquireMore($player)) break;
-            if(!$isFree) {} # TODO: Check if they actually can afford it.
+            if(!$isFree) {
+                if($this->money->canAfford($player, ConfigManager::getPrice())) {
+                    if(!$this->money->pay($player, ConfigManager::getPrice())) break;
+                } else {
+                    break;
+                }
+            }
             $tickets = $this->players[$player] ?? 0;
             $this->players[$player] = $tickets + 1;
             $this->prizePool += ConfigManager::getPrice();

@@ -38,7 +38,7 @@ class LottoTask extends Task {
         }
         # TODO: Create intervals for when a message should be sent.
 
-        $this->plugin->getServer()->broadcastMessage(TextFormat::YELLOW.'[PocketLotto] '.trim($remaining).' remaining until next draw.');
+        #$this->plugin->getServer()->broadcastMessage(TextFormat::YELLOW.'[PocketLotto] '.trim($remaining).' remaining until next draw.');
         #$this->plugin->getServer()->broadcastMessage(TextFormat::YELLOW.'[PocketLotto] Current prize pool: '.$this->lm->getPrizePool().' '.ConfigManager::getCurrencyName().'!');
     }
 
