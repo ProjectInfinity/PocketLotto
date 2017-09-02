@@ -3,6 +3,7 @@
 namespace ProjectInfinity\PocketLotto\util;
 
 use DateTime;
+use pocketmine\utils\TextFormat;
 use ProjectInfinity\PocketLotto\PocketLotto;
 
 class LottoManager {
@@ -89,8 +90,11 @@ class LottoManager {
     }
 
     public function refundAll() {
-        # TODO: All monetary things.
-
+        foreach($this->players as $player => $tickets) {
+            $this->money->refund($player, ConfigManager::getPrice() * $tickets);
+            $pl = $this->plugin->getServer()->getPlayer($player);
+            if($pl !== null) $pl->sendMessage(TextFormat::YELLOW.'[PocketVote] Your tickets was refunded because not enough players participated in the draw.');
+        }
     }
 
     /**
