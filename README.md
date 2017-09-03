@@ -1,5 +1,5 @@
-#PocketLotto
+# PocketLotto
 
-A open source lottery plugin with support for PocketVote.
+A open source lottery plugin with support for PocketVote and economy plugins.
 
-_Currently a work in process, a few things are needed before this can be completed such as improving the situation in regards to economy plugins._
+_This plugin is currently a work in progress, it should be functional but so far only includes support for Economy2. EconomyAPI will be added at a later date._
