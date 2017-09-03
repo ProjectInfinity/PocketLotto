@@ -17,6 +17,7 @@ class MoneyManager {
         $this->plugin = $plugin;
         if($plugin->getServer()->getPluginManager()->getPlugin('EconomyAPI') !== null) $this->bridge = new EconomyAPIBridge($plugin);
         if($plugin->getServer()->getPluginManager()->getPlugin('Economy2') !== null) $this->bridge = new Economy2Bridge($plugin);
+        if($this->bridge === null) $this->plugin->getPluginLoader()->disablePlugin($plugin);
     }
 
     public function canAfford(string $player, $amount): bool {
