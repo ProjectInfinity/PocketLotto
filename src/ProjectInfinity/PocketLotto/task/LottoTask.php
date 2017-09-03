@@ -10,22 +10,16 @@ use ProjectInfinity\PocketLotto\util\ConfigManager;
 class LottoTask extends Task {
 
     /** @var PocketLotto $plugin */
-    private $plugin, $lm, $drawTimer;
-    /** @var DateTime $nextTime */
-    private $nextTime;
+    private $plugin, $lm;
 
     public function __construct(PocketLotto $plugin) {
         $this->plugin = $plugin;
         $this->lm = $plugin->getLottoManager();
-        $this->drawTimer = $this->lm->getDrawTimer();
-
-        #$this->prevTime = $this->nextTime;
         $this->lm->setNextDraw();
     }
 
     public function onRun(int $currentTick) {
-        #$this->plugin->getLogger()->debug('LottoTask ran.');
-        $remaining = $this->lm->getTimeRemaining();
+        $remaining = trim($this->lm->getTimeRemaining());
         if(empty($remaining)) $remaining = 'A couple of seconds';
 
         $diff = $this->lm->getNextDraw()->diff(new DateTime('now'));
@@ -35,16 +29,57 @@ class LottoTask extends Task {
             $this->draw();
         } else {
             # It wasn't time to draw, figure out if it's time to send a message.
+            if($diff->i === 45 && $diff->s === 0) {
+                # 45 Minutes remaining.
+                $this->plugin->getServer()->broadcastMessage(TextFormat::YELLOW."[PocketLotto] $remaining until draw! Current prize pool is ".
+                TextFormat::GREEN.$this->lm->getPrizePool().' '.ConfigManager::getCurrencyName());
+            }
+            if($diff->i === 30 && $diff->s === 0) {
+                # 30 Minutes remaining.
+                $this->plugin->getServer()->broadcastMessage(TextFormat::YELLOW."[PocketLotto] $remaining until draw! Current prize pool is ".
+                    TextFormat::GREEN.$this->lm->getPrizePool().' '.ConfigManager::getCurrencyName());
+            }
+            if($diff->i === 15 && $diff->s === 0) {
+                # 15 Minutes remaining.
+                $this->plugin->getServer()->broadcastMessage(TextFormat::YELLOW."[PocketLotto] $remaining until draw! Current prize pool is ".
+                    TextFormat::GREEN.$this->lm->getPrizePool().' '.ConfigManager::getCurrencyName());
+            }
+            if($diff->i === 10 && $diff->s === 0) {
+                # 10 Minutes remaining.
+                $this->plugin->getServer()->broadcastMessage(TextFormat::YELLOW."[PocketLotto] $remaining until draw! Current prize pool is ".
+                    TextFormat::GREEN.$this->lm->getPrizePool().' '.ConfigManager::getCurrencyName());
+            }
+            if($diff->i === 5 && $diff->s === 0) {
+                # 5 Minutes remaining.
+                $this->plugin->getServer()->broadcastMessage(TextFormat::YELLOW."[PocketLotto] $remaining until draw! Current prize pool is ".
+                    TextFormat::GREEN.$this->lm->getPrizePool().' '.ConfigManager::getCurrencyName());
+            }
+            if($diff->i === 2 && $diff->s === 0) {
+                # 2 Minutes remaining.
+                $this->plugin->getServer()->broadcastMessage(TextFormat::YELLOW."[PocketLotto] $remaining until draw! Current prize pool is ".
+                    TextFormat::GREEN.$this->lm->getPrizePool().' '.ConfigManager::getCurrencyName());
+            }
+            if($diff->i === 1 && $diff->s === 0) {
+                # 1 Minutes remaining.
+                $this->plugin->getServer()->broadcastMessage(TextFormat::YELLOW."[PocketLotto] $remaining until draw! Current prize pool is ".
+                    TextFormat::GREEN.$this->lm->getPrizePool().' '.ConfigManager::getCurrencyName());
+            }
+            if($diff->i === 0 && $diff->s === 30) {
+                # 30 seconds remaining.
+                $this->plugin->getServer()->broadcastMessage(TextFormat::YELLOW."[PocketLotto] $remaining until draw! Current prize pool is ".
+                    TextFormat::GREEN.$this->lm->getPrizePool().' '.ConfigManager::getCurrencyName());
+            }
+            if($diff->i === 0 && $diff->s === 10) {
+                # 10 seconds remaining.
+                $this->plugin->getServer()->broadcastMessage(TextFormat::YELLOW."[PocketLotto] $remaining until draw! Current prize pool is ".
+                    TextFormat::GREEN.$this->lm->getPrizePool().' '.ConfigManager::getCurrencyName());
+            }
+            if($diff->i === 0 && $diff->s <= 5) {
+                # Less than 5 seconds remaining.
+                $this->plugin->getServer()->broadcastMessage(TextFormat::YELLOW."[PocketLotto] $remaining until draw! Current prize pool is ".
+                    TextFormat::GREEN.$this->lm->getPrizePool().' '.ConfigManager::getCurrencyName());
+            }
         }
-        # TODO: Create intervals for when a message should be sent.
-
-        #$this->plugin->getServer()->broadcastMessage(TextFormat::YELLOW.'[PocketLotto] '.trim($remaining).' remaining until next draw.');
-        #$this->plugin->getServer()->broadcastMessage(TextFormat::YELLOW.'[PocketLotto] Current prize pool: '.$this->lm->getPrizePool().' '.ConfigManager::getCurrencyName().'!');
-    }
-
-    private function renew() {
-        $this->lm->setNextDraw();
-        $this->plugin->getServer()->broadcastMessage(TextFormat::YELLOW.'[PocketLotto] Next draw in '.trim($this->timeRemaining()).'.');
     }
 
     /**
@@ -54,10 +89,25 @@ class LottoTask extends Task {
         if($this->lm->countPlayers() < ConfigManager::getMinimumPlayers()) {
             $this->lm->refundAll();
             $this->plugin->getServer()->broadcastMessage(TextFormat::YELLOW.'[PocketLotto] There was not enough players participating. Tickets have been refunded.');
+            $this->lm->setNextDraw();
             return;
         }
-        # TODO: Continue draw.
+        $tickets = [];
+        foreach($this->lm->getPlayers() as $player => $amount) {
+            for($i = 0; $i < $amount; $i++) {
+                $tickets[] = $player;
+            }
+        }
+        shuffle($tickets);
+        $player = $tickets[array_rand($tickets)];
+
+        $this->plugin->getServer()->broadcastMessage(TextFormat::YELLOW.'[PocketLotto] '.
+            TextFormat::GREEN.$player.TextFormat::YELLOW.' won '.TextFormat::GREEN.$this->lm->getPrizePool().' '.ConfigManager::getCurrencyName());
+
+        $this->lm->getMoneyManager()->give($player, $this->lm->getPrizePool());
+
         # Finished drawing, now it's time to renew.
-        $this->renew();
+        $this->lm->setNextDraw();
+        $this->plugin->getServer()->broadcastMessage(TextFormat::YELLOW.'[PocketLotto] Next draw in '.trim($this->lm->getTimeRemaining()).'.');
     }
 }

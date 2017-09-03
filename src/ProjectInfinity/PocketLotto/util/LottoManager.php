@@ -42,7 +42,7 @@ class LottoManager {
             if(!$this->canAcquireMore($player)) break;
             if(!$isFree) {
                 if($this->money->canAfford($player, ConfigManager::getPrice())) {
-                    if(!$this->money->pay($player, ConfigManager::getPrice())) break;
+                    if(!$this->money->take($player, ConfigManager::getPrice())) break;
                 } else {
                     break;
                 }
@@ -75,7 +75,13 @@ class LottoManager {
         return $this->nextTime;
     }
 
+    public function getMoneyManager(): MoneyManager {
+        return $this->money;
+    }
+
     public function setNextDraw() {
+        $this->prizePool = ConfigManager::getStartPool();
+        $this->players = [];
         $this->nextTime = new DateTime();
         $this->nextTime->setTimestamp(time() + $this->drawTimer);
     }
@@ -84,14 +90,9 @@ class LottoManager {
         return count($this->players);
     }
 
-    public function reset() {
-        $this->prizePool = ConfigManager::getStartPool();
-        $this->players = [];
-    }
-
     public function refundAll() {
         foreach($this->players as $player => $tickets) {
-            $this->money->refund($player, ConfigManager::getPrice() * $tickets);
+            $this->money->give($player, ConfigManager::getPrice() * $tickets);
             $pl = $this->plugin->getServer()->getPlayer($player);
             if($pl !== null) $pl->sendMessage(TextFormat::YELLOW.'[PocketVote] Your tickets was refunded because not enough players participated in the draw.');
         }

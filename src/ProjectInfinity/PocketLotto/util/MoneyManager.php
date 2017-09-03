@@ -23,11 +23,11 @@ class MoneyManager {
         return $this->bridge->hasMoney($player, $amount);
     }
 
-    public function pay(string $player, $amount): bool {
+    public function take(string $player, $amount): bool {
         return $this->bridge->takeMoney($player, $amount);
     }
 
-    public function refund(string $player, $amount): bool {
+    public function give(string $player, $amount): bool {
         return $this->bridge->giveMoney($player, $amount);
     }
 }
