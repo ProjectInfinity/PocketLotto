@@ -20,8 +20,8 @@ class VoteListener implements Listener {
      * @priority MONITOR
      * @param VoteEvent $event
      */
-    public function onVoteRetrieved(VoteEvent $event) {
-        if(strlen($event->getPlayer()) > 16) return;
+    public function onVoteRetrieved(VoteEvent $event): void {
+        if(\strlen($event->getPlayer()) > 16) return;
         if($this->lm->canAcquireMore($event->getPlayer()) &&
             $this->plugin->getServer()->getPlayer($event->getPlayer()) === null &&
             $this->plugin->getServer()->getOfflinePlayer($event->getPlayer()) === null) return;
