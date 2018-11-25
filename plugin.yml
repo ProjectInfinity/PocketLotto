@@ -1,6 +1,6 @@
 name: PocketLotto
 main: ProjectInfinity\PocketLotto\PocketLotto
-version: 1.1.0
+version: 1.1.1
 api: [3.0.0]
 author: ProjectInfinity
 softdepend: ["PocketVote", "Economy2", "EconomyAPI"]

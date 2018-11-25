@@ -32,7 +32,7 @@ class PocketLotto extends PluginBase {
         ConfigManager::load();
 
         $pocketvote = $this->getServer()->getPluginManager()->getPlugin('PocketVote');
-        $this->pocketvoteIsEnabled = isset($pocketvote) ? $pocketvote->isEnabled() : false;
+        $this->pocketvoteIsEnabled = $pocketvote !== null ? $pocketvote->isEnabled() : false;
 
         $this->money = new MoneyManager($this);
         if($this->isDisabled()) return;
@@ -46,7 +46,7 @@ class PocketLotto extends PluginBase {
         # Plugin setup should be complete by now, it's time to start the lottery timer.
         $this->lottoTask = $this->getScheduler()->scheduleRepeatingTask(new LottoTask($this), 20);
 
-        $this->getServer()->getCommandMap()->register('lotto', new LottoCommand($this));
+        $this->getServer()->getCommandMap()->register('pocketlotto', new LottoCommand($this));
     }
 
     public function onDisable() {
